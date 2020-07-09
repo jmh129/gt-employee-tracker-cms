@@ -24,3 +24,12 @@ last_name VARCHAR(30),
 role_id INT,
 manager_id INT, 
 );
+
+INSERT INTO employee(first_name, last_name, role_id, manager_id)
+VALUES("James", "Holding",1, 1), ("Tom", "Brady",2,  2);
+
+INSERT INTO role(title, salary, department_id)
+VALUES("Senior Analyst", "100000",1);
+
+INSERT INTO department(name)
+VALUES("Quality Assurance");

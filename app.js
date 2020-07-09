@@ -3,11 +3,8 @@ var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
   host: "localhost",
-
   port: 3306,
-
   user: "root",
-
   password: "password",
   database: "employee_DB",
 });
@@ -38,15 +35,47 @@ function initPrompt() {
     .then(function (answer) {
       switch (answer.initialQuestion) {
         case "View Employees":
-          viewEmployees();
+          let userView = "employee";
+          viewTable(userView);
+          break;
+        case "View Department":
+          let userView1 = "department";
+          viewTable(userView1);
+          break;
+        case "View Roles":
+          let userView3 = "role";
+          viewTable(userView3);
+          break;
+        case "Add Department":
+          addDapartment();
           break;
       }
     });
 }
 
-function viewEmployees() {
-  connection.query("SELECT * FROM employee", function (err, res) {
+function viewTable(answer) {
+  connection.query("SELECT * FROM ??", answer, function (err, res) {
     if (err) throw err;
-    console.log(res);
+    console.table(res);
   });
+}
+
+function addDapartment() {
+  inquirer
+    .prompt({
+      name: "name",
+      type: "input",
+      message: "Please enter the new department.",
+    })
+    .then(function (answer) {
+      console.log(answer.name);
+      connection.query(
+        "INSERT INTO department(name) VALUES (?)",
+        answer.name,
+        function (err, res) {
+          if (err) throw err;
+          console.log("Department added!");
+        }
+      );
+    });
 }
