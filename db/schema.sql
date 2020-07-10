@@ -26,10 +26,10 @@ manager_id INT,
 );
 
 INSERT INTO employee(first_name, last_name, role_id, manager_id)
-VALUES("James", "Holding",1, 1), ("Tom", "Brady",2,  2);
+VALUES("James", "Holding",2, 1), ("Tom", "Brady",1, 2),("Dan", "Marino",3, 1),("Peyton", "Manning",4, 1),("Russell", "Wilson",5, 1),("Erlich", "Bachmann",6, 1);
 
 INSERT INTO role(title, salary, department_id)
-VALUES("Senior Analyst", "100000",1);
+VALUES("Analyst", "50000",1),("Developer", "75000",2),("Salesman", "100000",3),("HR Generalist", "65000",4),("Receptionist", "45000",5),("Chief Technology Officer", "150000",6);
 
 INSERT INTO department(name)
-VALUES("Quality Assurance");
+VALUES("Quality Assurance"),("Software Development"),("Sales"),("Marketing"),("Human Resources"),("General Staff"),("Executive Leadership");

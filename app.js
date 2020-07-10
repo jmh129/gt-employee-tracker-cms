@@ -23,23 +23,27 @@ function initPrompt() {
       type: "list",
       message: "What would you like to do today?",
       choices: [
+        "View All Records",
         "View Employees",
         "Add Employee",
         "View Department",
         "Add Department",
         "View Roles",
         "Add Roles",
-        "Update Employee Roles",
+        "Update Employee Role",
         "Exit",
       ],
     })
     .then(function (answer) {
       switch (answer.initialQuestion) {
+        case "View All Records":
+          viewAll();
+          break;
         case "View Employees":
           let userView = "employee";
           viewTable(userView);
           break;
-        case "View Department":
+        case "View Departments":
           let userView1 = "department";
           viewTable(userView1);
           break;
@@ -56,7 +60,7 @@ function initPrompt() {
         case "Add Employee":
           addEmployee();
           break;
-        case "Update Employee Roles":
+        case "Update Employee Role":
           updateEmployeeRole();
           break;
         case "Exit":
@@ -76,6 +80,17 @@ function returnInit(answer) {
     .then(function (answer) {
       initPrompt();
     });
+}
+
+function viewAll() {
+  connection.query(
+    "SELECT employee.id, first_name, last_name, title,  name as department_name, manager_id,salary FROM role JOIN department ON role.department_id=department.id RIGHT JOIN employee ON role.id=employee.role_id",
+    function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      returnInit();
+    }
+  );
 }
 
 function viewTable(answer) {
@@ -185,7 +200,7 @@ function addEmployee() {
     });
 }
 
-function updateEmployeeRole(answer) {
+function updateEmployeeRole() {
   inquirer
     .prompt([
       {
