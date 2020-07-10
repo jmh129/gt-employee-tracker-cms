@@ -31,6 +31,7 @@ function initPrompt() {
         "View Roles",
         "Add Roles",
         "Update Employee Role",
+        "Delete Employee",
         "View Budget",
         "Exit",
       ],
@@ -63,6 +64,9 @@ function initPrompt() {
           break;
         case "Update Employee Role":
           updateEmployeeRole();
+          break;
+        case "Delete Employee":
+          deleteEmployee();
           break;
         case "View Budget":
           viewBudget();
@@ -261,6 +265,30 @@ function updateEmployeeRole() {
   });
 }
 
+function deleteEmployee() {
+  connection.query("SELECT * FROM employee", function (err, res) {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: "id",
+          type: "input",
+          message: "Please enter the ID of the employee.",
+        },
+      ])
+      .then(function (answer) {
+        connection.query(
+          "DELETE FROM employee WHERE id =?",
+          answer.id,
+          function (err) {
+            if (err) throw err;
+            console.log("Employee " + answer.id + " has been successfully deleted.")
+            returnInit();
+          }
+        );
+      });
+  });
+}
 function viewBudget() {
   connection.query(
     "SELECT name AS 'Department Name', SUM(salary) AS 'Sum of Salaries', COUNT(employee.role_id) AS 'Number of Employees' FROM department INNER JOIN role ON department.id=role.department_id INNER JOIN employee ON role.id=employee.role_id GROUP BY department_id ORDER BY SUM(salary) DESC;",
