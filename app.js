@@ -43,7 +43,7 @@ function initPrompt() {
           let userView = "employee";
           viewTable(userView);
           break;
-        case "View Departments":
+        case "View Department":
           let userView1 = "department";
           viewTable(userView1);
           break;
