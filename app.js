@@ -195,8 +195,8 @@ function addEmployee() {
       ])
       .then(function (answer) {
         let role = data.filter(
-            (object) => object.title === answer.role_id
-          );
+          (object) => object.title === answer.role_id
+        );
         connection.query(
           "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)",
           [
@@ -221,36 +221,44 @@ function addEmployee() {
 }
 
 function updateEmployeeRole() {
-  inquirer
-    .prompt([
-      {
-        name: "id",
-        type: "input",
-        message: "Please enter the ID of the employee.",
-      },
-      {
-        name: "new_role",
-        type: "input",
-        message: "Please enter the new role ID of the employee.",
-      },
-    ])
-    .then(function (answer) {
-      connection.query(
-        "UPDATE employee SET role_id =" +
-          answer.new_role +
-          " WHERE id =" +
-          answer.id +
-          ";"
-      );
-      console.log(
-        "Employee " +
-          answer.id +
-          "'s role has been updated to " +
-          answer.new_role +
-          "."
-      );
-      returnInit();
-    });
+  connection.query("SELECT * FROM role", function (err, data) {
+    if (err) throw err;
+    const arrayOfRoles = data.map((object) => object.title);
+    inquirer
+      .prompt([
+        {
+          name: "id",
+          type: "input",
+          message: "Please enter the ID of the employee.",
+        },
+        {
+          type: "list",
+          message: "Plese select a roles",
+          name: "role_id",
+          choices: arrayOfRoles,
+        },
+      ])
+      .then(function (answer) {
+        let role = data.filter(
+          (object) => object.title === answer.role_id
+        );
+        connection.query(
+          "UPDATE employee SET role_id =" +
+            role[0].id +
+            " WHERE id =" +
+            answer.id +
+            ";"
+        );
+        console.log(
+          "Employee " +
+            answer.id +
+            "'s role has been updated to " +
+            answer.new_role +
+            "."
+        );
+        returnInit();
+      });
+  });
 }
 
 function viewBudget() {
