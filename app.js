@@ -29,6 +29,7 @@ function initPrompt() {
         "Add Department",
         "View Roles",
         "Add Roles",
+        "Exit",
       ],
     })
     .then(function (answer) {
@@ -54,7 +55,22 @@ function initPrompt() {
         case "Add Employee":
           addEmployee();
           break;
+        case "Exit":
+          connection.end();
+          break;
       }
+    });
+}
+
+function returnInit(answer) {
+  inquirer
+    .prompt({
+      name: "return",
+      type: "input",
+      message: "Would you like to search again? (y/n)",
+    })
+    .then(function (answer) {
+      initPrompt();
     });
 }
 
@@ -62,6 +78,7 @@ function viewTable(answer) {
   connection.query("SELECT * FROM ??", answer, function (err, res) {
     if (err) throw err;
     console.table(res);
+    returnInit();
   });
 }
 
@@ -79,6 +96,7 @@ function addDapartment() {
         function (err, res) {
           if (err) throw err;
           console.log("Department Added!");
+          returnInit();
         }
       );
     });
@@ -142,10 +160,20 @@ function addEmployee() {
     .then(function (answer) {
       connection.query(
         "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)",
-        [answer.first_name, answer.last_name, answer.role_id, answer.manager_id ],
+        [
+          answer.first_name,
+          answer.last_name,
+          answer.role_id,
+          answer.manager_id,
+        ],
         function (err, res) {
           if (err) throw err;
-          console.log(answer.first_name + " " + answer.last_name + " Has Been Added!");
+          console.log(
+            answer.first_name +
+              " " +
+              answer.last_name +
+              " Has Been Added!"
+          );
         }
       );
     });
