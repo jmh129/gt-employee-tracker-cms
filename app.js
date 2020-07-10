@@ -29,6 +29,7 @@ function initPrompt() {
         "Add Department",
         "View Roles",
         "Add Roles",
+        "Update Employee Roles",
         "Exit",
       ],
     })
@@ -43,8 +44,8 @@ function initPrompt() {
           viewTable(userView1);
           break;
         case "View Roles":
-          let userView3 = "role";
-          viewTable(userView3);
+          let userView2 = "role";
+          viewTable(userView2);
           break;
         case "Add Department":
           addDapartment();
@@ -54,6 +55,9 @@ function initPrompt() {
           break;
         case "Add Employee":
           addEmployee();
+          break;
+        case "Update Employee Roles":
+          updateEmployeeRole();
           break;
         case "Exit":
           connection.end();
@@ -67,7 +71,7 @@ function returnInit(answer) {
     .prompt({
       name: "return",
       type: "input",
-      message: "Would you like to search again? (y/n)",
+      message: "Press any key to return to the main screen.",
     })
     .then(function (answer) {
       initPrompt();
@@ -128,6 +132,7 @@ function addRole() {
         function (err, res) {
           if (err) throw err;
           console.log(answer.title + "Has Been Added!");
+          returnInit();
         }
       );
     });
@@ -174,7 +179,41 @@ function addEmployee() {
               answer.last_name +
               " Has Been Added!"
           );
+          returnInit();
         }
       );
+    });
+}
+
+function updateEmployeeRole(answer) {
+  inquirer
+    .prompt([
+      {
+        name: "id",
+        type: "input",
+        message: "Please enter the ID of the employee.",
+      },
+      {
+        name: "new_role",
+        type: "input",
+        message: "Please enter the new role ID of the employee.",
+      },
+    ])
+    .then(function (answer) {
+      connection.query(
+        "UPDATE employee SET role_id =" +
+          answer.new_role +
+          " WHERE id =" +
+          answer.id +
+          ";"
+      );
+      console.log(
+        "Employee " +
+          answer.id +
+          "'s role has been updated to " +
+          answer.new_role +
+          "."
+      );
+      returnInit();
     });
 }
