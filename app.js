@@ -126,35 +126,43 @@ function addDapartment() {
 }
 
 function addRole() {
-  inquirer
-    .prompt([
-      {
-        name: "title",
-        type: "input",
-        message: "Please enter the title of the",
-      },
-      {
-        name: "salary",
-        type: "input",
-        message: "Please enter the salary for the role.",
-      },
-      {
-        name: "depID",
-        type: "input",
-        message: "Please enter the department ID.",
-      },
-    ])
-    .then(function (answer) {
-      connection.query(
-        "INSERT INTO role(title, salary, department_id) VALUES (?,?,?)",
-        [answer.title, answer.salary, answer.depID],
-        function (err, res) {
-          if (err) throw err;
-          console.log(answer.title + "Has Been Added!");
-          returnInit();
-        }
-      );
-    });
+  connection.query("SELECT * FROM department", function (err, data) {
+    if (err) throw err;
+    const arrayOfDepartments = data.map((object) => object.name);
+    inquirer
+      .prompt([
+        {
+          name: "title",
+          type: "input",
+          message: "Please enter the title of the",
+        },
+        {
+          name: "salary",
+          type: "input",
+          message: "Please enter the salary for the role.",
+        },
+        {
+          type: "list",
+          message: "Plese select a department",
+          name: "department_id",
+          choices: arrayOfDepartments,
+        },
+      ])
+      .then(function (answer) {
+        let department = data.filter(
+          (object) => object.name === answer.department_id
+        );
+        connection.query(
+          "INSERT INTO role(title, salary, department_id) VALUES (?,?,?)",
+          [answer.title, answer.salary, department[0].id],
+          function (err, res) {
+            if (err) throw err;
+            console.log(answer.title + "Has Been Added!");
+            returnInit();
+          }
+        );
+      });
+  });
 }
 
 function addEmployee() {
