@@ -74,14 +74,14 @@ function initPrompt() {
     });
 }
 
-function returnInit(answer) {
+function returnInit() {
   inquirer
     .prompt({
       name: "return",
       type: "input",
       message: "Press any key to return to the main screen.",
     })
-    .then(function (answer) {
+    .then(function () {
       initPrompt();
     });
 }
@@ -166,50 +166,58 @@ function addRole() {
 }
 
 function addEmployee() {
-  inquirer
-    .prompt([
-      {
-        name: "first_name",
-        type: "input",
-        message: "Please enter the first name of the employee.",
-      },
-      {
-        name: "last_name",
-        type: "input",
-        message: "Please enter the last name of the employee.",
-      },
-      {
-        name: "role_id",
-        type: "input",
-        message: "Please enter the role id.",
-      },
-      {
-        name: "manager_id",
-        type: "input",
-        message: "Please enter the ID of the employee's manager.",
-      },
-    ])
-    .then(function (answer) {
-      connection.query(
-        "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)",
-        [
-          answer.first_name,
-          answer.last_name,
-          answer.role_id,
-          answer.manager_id,
-        ],
-        function (err, res) {
-          if (err) throw err;
-          console.log(
-            answer.first_name +
-              " " +
-              answer.last_name +
-              " Has Been Added!"
+  connection.query("SELECT * FROM role", function (err, data) {
+    if (err) throw err;
+    const arrayOfRoles = data.map((object) => object.title);
+    inquirer
+      .prompt([
+        {
+          name: "first_name",
+          type: "input",
+          message: "Please enter the first name of the employee.",
+        },
+        {
+          name: "last_name",
+          type: "input",
+          message: "Please enter the last name of the employee.",
+        },
+        {
+          type: "list",
+          message: "Plese select a roles",
+          name: "role_id",
+          choices: arrayOfRoles,
+        },
+        {
+          name: "manager_id",
+          type: "input",
+          message: "Please enter the ID of the employee's manager.",
+        },
+      ])
+      .then(function (answer) {
+        let role = data.filter(
+            (object) => object.title === answer.role_id
           );
-          returnInit();
-        }
-      );
-    });
+        connection.query(
+          "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)",
+          [
+            answer.first_name,
+            answer.last_name,
+            role[0].id,
+            answer.manager_id,
+          ],
+          function (err, res) {
+            if (err) throw err;
+            console.log(
+              answer.first_name +
+                " " +
+                answer.last_name +
+                " Has Been Added!"
+            );
+            returnInit();
+          }
+        );
+      });
+  });
 }
 
 function updateEmployeeRole() {
