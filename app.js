@@ -31,6 +31,7 @@ function initPrompt() {
         "View Roles",
         "Add Roles",
         "Update Employee Role",
+        "View Budget",
         "Exit",
       ],
     })
@@ -63,6 +64,9 @@ function initPrompt() {
         case "Update Employee Role":
           updateEmployeeRole();
           break;
+        case "View Budget":
+          viewBudget();
+          break;
         case "Exit":
           connection.end();
           break;
@@ -84,7 +88,7 @@ function returnInit(answer) {
 
 function viewAll() {
   connection.query(
-    "SELECT employee.id, first_name, last_name, title,  name as department_name, manager_id,salary FROM role JOIN department ON role.department_id=department.id RIGHT JOIN employee ON role.id=employee.role_id",
+    "SELECT employee.id AS 'Employee ID', first_name AS 'First Name', last_name AS 'Last Name', title AS 'Title',  name AS 'Department', manager_id AS 'Manager ID',salary AS 'Salary' FROM role JOIN department ON role.department_id=department.id RIGHT JOIN employee ON role.id=employee.role_id",
     function (err, res) {
       if (err) throw err;
       console.table(res);
@@ -231,4 +235,15 @@ function updateEmployeeRole() {
       );
       returnInit();
     });
+}
+
+function viewBudget() {
+  connection.query(
+    "SELECT name AS 'Department Name', SUM(salary) AS 'Sum of Salaries', COUNT(employee.role_id) AS 'Number of Employees' FROM department INNER JOIN role ON department.id=role.department_id INNER JOIN employee ON role.id=employee.role_id GROUP BY department_id ORDER BY SUM(salary) DESC;",
+    function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      returnInit();
+    }
+  );
 }
