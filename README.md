@@ -1,4 +1,5 @@
 Employee Tracker
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Introduction
 This application was designed to be a CMS so that the user can input details regarding their orgazational structure.
@@ -12,7 +13,7 @@ This application was designed to be a CMS so that the user can input details reg
 - [License](#license)
 
 ### Installation
-Clone this repo to your local machine using https://github.com/jmh129/gt-note-taker
+Clone this repo to your local machine using https://github.com/jmh129/gt-employee-tracker-cms/tree/master
 
 Note: Make sure to run npm install as this application makes use of node packages. 
 
