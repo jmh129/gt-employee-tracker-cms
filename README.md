@@ -17,7 +17,22 @@ Clone this repo to your local machine using https://github.com/jmh129/gt-note-ta
 Note: Make sure to run npm install as this application makes use of node packages. 
 
 ### Usage
-To use the application the user just needs to run the CLI and will be greeted with a list of actionable items for the user to use. The user can navigate through the list whther its, add an employee, add a department, view the budget, or delete an employee. 
+To use the application the user just needs to run the CLI and will be greeted with a list of actionable items for the user to use. The user can navigate through the list whther its, add an employee, add a department, view the budget, or delete an employee. The current functionality
+includeds:
+  View All Records 
+  View Employees 
+  Add Employee 
+  View Department 
+  Add Department 
+  View Roles 
+  Add Roles
+  Update Employee Role 
+  Delete Employee 
+  View Budget
+
+  With more to come!
+
+
 
 
 ### Example Demo:
