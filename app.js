@@ -289,6 +289,7 @@ function deleteEmployee() {
       });
   });
 }
+
 function viewBudget() {
   connection.query(
     "SELECT name AS 'Department Name', SUM(salary) AS 'Sum of Salaries', COUNT(employee.role_id) AS 'Number of Employees' FROM department INNER JOIN role ON department.id=role.department_id INNER JOIN employee ON role.id=employee.role_id GROUP BY department_id ORDER BY SUM(salary) DESC;",
