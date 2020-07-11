@@ -1,4 +1,5 @@
 Employee Tracker
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Introduction
 This application was designed to be a CMS so that the user can input details regarding their orgazational structure.
